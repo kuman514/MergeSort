@@ -4,11 +4,12 @@
 
 // implementing merge sort
 
-void mergeSort(std::vector<int>& arr, const int left, const int right)
+void mergeSort(std::vector<int>& arr, const int left, const int right, const bool desc = false)
 {
     // arr: a vector array for merge sort
     // left: index of the first unit of the (partial) array
     // right: index of the last unit of the (partial) array
+    // desc: sort in descending order (default = false, it means sorting in ascending order)
 
     int size = right - left + 1;
 
@@ -24,15 +25,15 @@ void mergeSort(std::vector<int>& arr, const int left, const int right)
     else if (size % 2 == 0)
     {
         // Separate: left ... left + size/2 - 1 || left + size/2 ... right
-        mergeSort(arr, left, left + size / 2 - 1);
-        mergeSort(arr, left + size / 2, right);
+        mergeSort(arr, left, left + size / 2 - 1, desc);
+        mergeSort(arr, left + size / 2, right, desc);
     }
     else if (size % 2 == 1)
     {
         // the left separation will have more
         // Separate: left ... left + size/2 || left + size/2 + 1 ... right
-        mergeSort(arr, left, left + size / 2);
-        mergeSort(arr, left + size / 2 + 1, right);
+        mergeSort(arr, left, left + size / 2, desc);
+        mergeSort(arr, left + size / 2 + 1, right, desc);
     }
 
     // temporary space for merge sort
@@ -47,18 +48,20 @@ void mergeSort(std::vector<int>& arr, const int left, const int right)
     int rightCursor = leftLimit + 1;
     int totalCursor = 0;
 
+    // inversion for descending sort
+    int invert = (desc) ? -1 : 1;
+
     // compare between two separations
-    // Sorting ASC
     while (leftCursor <= leftLimit && rightCursor <= rightLimit)
     {
-        if (arr[leftCursor] < arr[rightCursor])
+        if (invert * arr[leftCursor] < invert * arr[rightCursor])
         {
             tmpspace[totalCursor] = arr[leftCursor];
 
             leftCursor++;
             totalCursor++;
         }
-        else // if(arr[leftCursor] >= arr[rightCursor])
+        else // if(invert * arr[leftCursor] >= invert * arr[rightCursor])
         {
             tmpspace[totalCursor] = arr[rightCursor];
 
@@ -115,6 +118,7 @@ int main(void)
     }
 
     mergeSort(arr, 0, arr.size() - 1);
+    //mergeSort(arr, 0, arr.size() - 1, true);
 
     for (int i = 0; i < n; i++)
     {
