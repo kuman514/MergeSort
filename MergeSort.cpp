@@ -54,14 +54,30 @@ void mergeSort(std::vector<int>& arr, const int left, const int right, const boo
     // compare between two separations
     while (leftCursor <= leftLimit && rightCursor <= rightLimit)
     {
-        if (invert * arr[leftCursor] < invert * arr[rightCursor])
+        if (arr[leftCursor] == arr[rightCursor])
+        {
+            // if two variables have a same value each other,
+            // the earlier(left) one should come first.
+            // (Merge Sort is one of stable sorts.)
+
+            tmpspace[totalCursor] = arr[leftCursor];
+
+            leftCursor++;
+            totalCursor++;
+
+            tmpspace[totalCursor] = arr[rightCursor];
+
+            rightCursor++;
+            totalCursor++;
+        }
+        else if (invert * arr[leftCursor] < invert * arr[rightCursor])
         {
             tmpspace[totalCursor] = arr[leftCursor];
 
             leftCursor++;
             totalCursor++;
         }
-        else // if(invert * arr[leftCursor] >= invert * arr[rightCursor])
+        else // if(invert * arr[leftCursor] > invert * arr[rightCursor])
         {
             tmpspace[totalCursor] = arr[rightCursor];
 
